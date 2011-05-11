@@ -1,0 +1,87 @@
+Documentação Projeto Quarto Control
+Por Rafael Gimenes Leite | falecom@rafaelgimenes.net
+http://rafaelgimenes.net/2010/05/28/arduino-ethernet-shield-rele-lcd-sensor-de-movimento-envio-de-email/
+
+Lista de Componentes
+- Arduino Duemilanove (Atmega328)
+- EtherShield  (http://mcukits.com/2009/04/22/nkc-ethernet-shield-for-arduino-assembly-guide/)
+- Lcd 16x2 (http://www.nkcelectronics.com/16x2-lcd-module-while-characters-blue-backli162.html)
+- HCF4094 Shift Registar (para usar apenas 3 pinos na interface do LCD)
+- DS1302 (RTC timer)
+- Transistor NPN 2n2222 ou BC337
+- Rele 5 pinos Finder 12v - 693 445.002
+- Receptor IR TSOP1138 Vishray
+- Sensor de movimento  passivo 
+
+Mapa de Pinos
+
+-----------------------------------------------------
+LIGAÇÃO RELE
+
+Transistor NPN ^
+	Base > Resistor de 1k  > Pino 8 Arduino
+	Emissor > Rele Pino2(gnd) 
+	Coletor > GND Arduino
+
+Rele Pino1 > 12v
+Rele Pino2 > Transistor Emissor
+Rele Pino3 > Borne
+Rele Pino4 > Borne
+Rele Pino5 > Nada
+
+
+-----------------------------------------------------
+LIGAÇÃO RTC DS1302
+	DS IO > Pino 6 Arduino
+	DS CE > Pino 5 Arduino
+	DS SLK > Pino 7 Arduino
+	DS X1 > Cristal
+	DS X2 > Cristal
+	DS VCC1 > Bateria 5v
+	DS VCC2 > 5v Arduino
+	DS GND > Bateria GND e Arduino GND
+
+-----------------------------------------------------
+LIGAÇÃO LCD / HEF4094
+Consultar o arquivo  de imagem Lcd_3wires_HEF4094.png, originalmente usava os pinos 10, 11, 12 do arduino,
+Modifiquei para 2, 3, 4.
+VSS (GND) > Arduino GND
+VDD > 5v Arduino
+Out Enable > 5v Arduino
+Q5 > LCD 14 (DB7)
+Q6 > LCD 13 (DB6)
+Q7 > LCD 12 (DB5)
+Q8 > LCD 11 (DB4)
+Q'S > NÃO LIGA EM NADA
+QS > NÃO LIGA EM NADA
+STROBE > Pino 4 Arduino
+DATA > Pino 3 Arduino	
+CLOCK > Pino 2 Arduino
+Q1 > Não Liga em Nada
+Q2 > LCD 4 (RS)
+Q3 > LCD 5 (RW)
+Q4 > LCD 6 (E)
+Vss > GND
+-----------------------------------------------------
+LIGAÇÃO ETHERSHIELD
+Apenas encaixar o modulo, é necessario fazer uma mudança do código original da biblioteca spi no arduino mega 
+http://www.nkcelectronics.com/nkc-ethernet-shield-diy-kit-without-wiz812mj-mod812.html
+Os pinos 10, 11, 12, 13 são utilizados
+
+-----------------------------------------------------
+LIGAÇÃO SENSOR MOVIMENTO
+	Borne 12v > Sensor Vermelho 12V (pino 1)
+	Borne Gnd > Sensor Preto GDN (pino 2)
+	Borne Azul > Pino 9 Arduino >  Sensor Azul (pino 4)
+	Borne GND > Sensor Preto > pino (3)
+
+
+Usando conceito de pull down, tinha que ser o pino 9 para  evitando ocilação sinal;sensor ligado no GND e no pinDigMov internamente do Atmega
+pinMode(pinDigMov,INPUT); //setando sinal como entrada pino do sensor movimento
+digitalWrite(pinDigMov,HIGH); //setando *pull-up evitando ocilação sinal;sensor ligado no GND e no pinDigMov internamente do Atmega
+
+-----------------------------------------------------
+LIGAÇÃO RECEPTOR IR
+Pino 3 > Resistor 200r > Arduino pino 0
+Pino 2 > Capacitor 4.7 uf  Positivo
+Pino 1 > Capactor 4.7 uf Negativo
