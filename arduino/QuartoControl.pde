@@ -102,7 +102,7 @@ void loop()
 	modoDespetador(0); //já ativa o modo despertador só que no "modos serviço" com o parametro zero.
 	// só ativa o modo invador se for de segunda a sexta entre 7hr e 18hrs e 19 e 23
 	if(modo!=3){
-		if(t.day>=3 && t.day<=6){
+		if(t.day>=2 && t.day<=6){
 			if ((t.hr > 7 && t.hr < 17) || (t.hr > 18 && t.hr < 23)) {  
 				modoInvasor(0);
 			}
@@ -219,17 +219,21 @@ void modoDespetador(int exibe){
 		impHora();
 		delay(500);
 	}
-	if((t.hr==almH)&&(t.min==almM)){
-		if(!releAtivado){      
-			digitalWrite(pinDigRele,HIGH);
-			releAtivado=true;
-			if (exibe==1){
-				lcd.cursorTo(2,0);
-				lcd.printIn("Acorda");
+	
+	if(t.day>=2 && t.day<=6){
+		if((t.hr==almH)&&(t.min==almM)){
+			if(!releAtivado){      
+				digitalWrite(pinDigRele,HIGH);
+				releAtivado=true;
+					lcd.cursorTo(2,0);
+					lcd.printIn("Acorda");
 			}
+		}else if((t.hr==almH)&&(t.min==almM+5)){
+				digitalWrite(pinDigRele,LOW);
+				releAtivado=false;
 		}
 	}  
-}
+}	
 /*
 * Modo Luz, lê sensor de movimento, se movimento detectado acende a luz.
 */
