@@ -14,8 +14,8 @@
      Sensor Movimento: Alimentação 12v fonte externa, Pino Arduino PullUp internto ativado(pinDigMov), Gnd Arduino.
      Receptor InfraRed TV: Capacitor 4.7 uf, Gnd, 5v, Pino Arduino(pinDigIC) > Resistor 100ohms; *necessario desconexão para programar pois usa o mesmo pino da serial.
 	 DS1302: CE > 5 Arduino, IO > 6 Arduino, CLK > 6 Arduino
- __Autor: Rafael Gimenes Leite falecom@rafaelgimenes.net -02/05/2011 v7.
- __Licensa: Este software pode ser livremente estudado e alterado mas gostaria de ser avisado :).
+ __Autor: Rafael Gimenes Leite falecom@rafaelgimenes.net -07/09/2011 v0.
+ __Licenca: Este software pode ser livremente estudado e alterado mas gostaria de ser avisado :).
  */
 // fazendo includes necessários
 #include <Ethernet.h>
@@ -68,8 +68,8 @@ boolean releAtivado=false; //para controle modo server
 int cntChar=0; //para controle modo webserver
 char impdta[50]; //DS1302 para impressao da data
 int dta[7] = {2010,7,7,9,00,2,4};//DS1302 0=ano,1=mes,2=dia,3=hora,4=minuto,5=segundo,6=dia da semana;
-int almH=6; //horário do alarme
-int almM=45; // minuto do alarme
+int almH=5; //horário do alarme
+int almM=37; // minuto do alarme
 DS1302 rtc(pinDigDsCE,pinDigDsIO,pinDigDsSCLK); // objeto DS1302
 IRrecv cRecpIR(pinDigIC); //objeto do Receptor IR
 decode_results resCtrl; //objeto Resultados receptor IR
@@ -90,7 +90,6 @@ void setup()
 	digitalWrite(pinDigMov,HIGH); //setando *pull-up evitando ocilação sinal;sensor ligado no GND e no pinDigMov internamente do Atmega
 	delay(500); //espera 5 segundos pra ir pro loop
 	modoSobre(); 
-	//Serial.begin(9600);
 }
 /*
 * Loop Principal.
@@ -103,7 +102,7 @@ void loop()
 	// só ativa o modo invador se for de segunda a sexta entre 7hr e 18hrs e 19 e 23
 	if(modo!=3){
 		if(t.day>=2 && t.day<=6){
-			if ((t.hr > 7 && t.hr < 17) || (t.hr > 18 && t.hr < 23)) {  
+			if ((t.hr > 5 && t.hr < 18)) {  
 				modoInvasor(0);
 			}
 		}      
@@ -155,7 +154,7 @@ void loop()
 void modoSobre(){
 	delay(50);
 	lcd.clear();
-	lcd.printIn("QuartoControl v7");
+	lcd.printIn("QuartoControl v0");
 	lcd.cursorTo(2,0);
 	lcd.printIn("by RafaelGimenes");
 	delay(150);
@@ -225,8 +224,8 @@ void modoDespetador(int exibe){
 			if(!releAtivado){      
 				digitalWrite(pinDigRele,HIGH);
 				releAtivado=true;
-					lcd.cursorTo(2,0);
-					lcd.printIn("Acorda");
+				lcd.cursorTo(2,0);
+				lcd.printIn("Acorda");
 			}
 		}else if((t.hr==almH)&&(t.min==almM+5)){
 				digitalWrite(pinDigRele,LOW);
@@ -352,7 +351,7 @@ void modoServidor (int exibe){
 				if(linhaEntrada.length() < maxLinha) {
 					linhaEntrada+=c; 
 				}  
-				//Se foi recebido um caracter linefeed - LF e a linha está em branco , a requisição http encerrou.
+				//Se foi recebido um caracter linefeed - LF e a linha está em branco, a requisição http encerrou.
 				if (c == '\n' && linhaAtualvazia){
 					if(exibe==1){
 						lcd.cursorTo(2,0);
@@ -365,7 +364,7 @@ void modoServidor (int exibe){
 					//começa a enviar o formulário html
 					requisicaoHttp.print("<html>") ;
 					requisicaoHttp.print("<body bgcolor='000000'><font face='verdana' color='gray' size='3'>");                
-					requisicaoHttp.println("<h3>Quarto do Rafael Gimenes v7</h3>");
+					requisicaoHttp.println("<h3>Quarto do Rafael Gimenes v0</h3>");
 					requisicaoHttp.println("Controle da Lampada");
 					requisicaoHttp.println("<b>Status:</b> ") ;         
 					if(releAtivado) {
@@ -470,7 +469,6 @@ void setHora(){
 */
 void impHora()
 {
-	t = rtc.time();
 	snprintf(impdta, sizeof(impdta), "%04d-%02d-%02d %02d:%02d:%02d",t.yr,t.mon,t.date,t.hr,t.min,t.sec);
 	lcd.printIn(impdta);
 }
