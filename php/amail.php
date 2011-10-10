@@ -10,7 +10,7 @@ $corpo = 'Email enviado, do quarto do Rafael Gimenes motivo:  ' . $_REQUEST['A']
 $corpo = $corpo . ' Opções para Susto  ';
 $corpo = $corpo . ' http://' . $ip . ':9703/R1=OF';
 $corpo = $corpo . '               http://' . $ip . ':9703/R1=ON';
-$corpo = $corpo . '<br> Mensagem automática :) QuartoControl V1 ';
+$corpo = $corpo . '\n Mensagem automática :) QuartoControl V1 ';
 $headers = "From: Quarto@rafaelgimenes.net";
 if($_REQUEST['E']=='1'){
 	$mail_sent = @mail( $para, $assunto, $corpo, $headers );
