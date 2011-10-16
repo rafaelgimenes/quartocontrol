@@ -51,8 +51,8 @@
 
 // declarando mac, ip, gateway
 byte mac[] = {0xDE,0xAD,0xBE,0xEF,0xFE,0xED};
-byte ip[] = {10,0,0,20}; 
-byte gt[] = {10,0,0,1};
+byte ip[] = {192,168,2,20}; 
+byte gt[] = {192,168,2,1};
 byte snet[] = {255,255,255,0};
 byte eip[] = {187,45,214,134}; //ip servidor rafaelgimenes.net para acessar os php que manda e-mail.
 // variáves de controle
