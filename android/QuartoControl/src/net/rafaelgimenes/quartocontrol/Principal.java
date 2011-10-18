@@ -62,7 +62,7 @@ public class Principal extends Activity implements SensorEventListener {
             public void onClick(View v) {
                 if(ChkLuz.isChecked()) {
                     //envia comando; ON
-                        ClienteHttpGet clienteON = new ClienteHttpGet("http://10.0.0.20:9703/R1=ON");
+                        ClienteHttpGet clienteON = new ClienteHttpGet("http://192.168.2.20:9703/R1=ON");
                         clienteON.fim();
                         acesa=true;
                         /*AlertDialog.Builder dialogo = new AlertDialog.Builder(Principal.this); //dialogo geral
@@ -72,7 +72,7 @@ public class Principal extends Activity implements SensorEventListener {
                         dialogo.show();*/
                     
                 }else {
-                        ClienteHttpGet clienteOFF = new ClienteHttpGet("http://10.0.0.20:9703/R1=OF");
+                        ClienteHttpGet clienteOFF = new ClienteHttpGet("http://192.168.2.20:9703/R1=OF");
                         clienteOFF.fim();
                         /*AlertDialog.Builder dialogo = new AlertDialog.Builder(Principal.this); //dialogo geral
                         dialogo.setTitle("Comando Enviado");
